@@ -9,3 +9,5 @@ index-url = https://admin:${JF_TOKEN}@academy-artifactory/artifactory/api/pypi/p
 trusted-host = academy-artifactory" > ~/.pip/pip.conf
 
 echo "export JFROG_ACCESS_TOKEN=${JF_TOKEN}" >> ~/.bashrc
+
+jf pip-config set --repo-resolve pypi-secure
