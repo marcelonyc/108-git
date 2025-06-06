@@ -10,4 +10,4 @@ trusted-host = academy-artifactory" > ~/.pip/pip.conf
 
 echo "export JFROG_ACCESS_TOKEN=${JF_TOKEN}" >> ~/.bashrc
 
-jf pip-config set --repo-resolve pypi-secure
+jf pip-config --repo-resolve pypi-secure
