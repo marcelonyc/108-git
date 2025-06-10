@@ -5,7 +5,6 @@ exec > /tmp/lab-setup.out
 
 source /root/.bashrc
 
-
 log_error () {
     echo -e "[`date`]\033[31mERROR: $1\033[0m"
 }
