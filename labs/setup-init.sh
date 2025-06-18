@@ -55,7 +55,8 @@ log_task "Docker Repo created"
 ## Publish image to Artifactory
 # put push in the background so we can continue with the script
 HFQDN=`nslookup academy-artifactory|grep academy-artifactory|awk '{print $1}'|grep -v Name`
-jf docker login  -uadmin -pAdmin1234! ${HFQDN}
+HFQDN="academy-artifactory:80"
+jf docker login  -uadmin -pAdmin1234! http://${HFQDN}
 log_task "Docker login"
 jf docker tag academy-docker-image ${HFQDN}/academy-docker-local/academy-docker-image
 log_task "Docker image created"
