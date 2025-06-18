@@ -16,9 +16,9 @@ log_task () {
 log_task "Started Lab setup"
 
 
-# Build docker image while wqe wait for Artifactory
+# Build docker image while we wait for Artifactory
 cd jfrog
-docker build -t academy-docker-image .
+docker build -t academy-docker-image . 
 ##
 
 # Wait for Artifactory
