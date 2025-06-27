@@ -5,6 +5,6 @@ RUN mkdir -p app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ../ .
+COPY . .
 
-CMD ["python", "src/main.py"]
+CMD ["python", "app/main.py"]
