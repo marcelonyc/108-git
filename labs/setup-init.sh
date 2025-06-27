@@ -63,6 +63,11 @@ log_task "Docker image created"
 jf docker push ${HFQDN}/academy-docker-local/academy-docker-image
 log_task "Docker image pushed"
 
- 
+log_task "Start image scan in Artifactory"
+export path_url="api/v2/index"
+jf xr cl ${path_url} \
+-k -v \
+--data '{ "repo_path": "academy-docker-local/academy-docker-image/latest/manifest.json"}' \
+-H "Content-type: application/json"
 
 log_task "Lab Setup Completed"
