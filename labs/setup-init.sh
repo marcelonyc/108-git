@@ -17,7 +17,7 @@ log_task "Started Lab setup"
 
 
 # Build docker image while we wait for Artifactory
-cd jfrog
+cd jfrog/lab-2
 docker build -t academy-docker-image . 
 ##
 
@@ -50,17 +50,39 @@ echo '{"rclass": "local",
  "xrayIndex": "true"
 }' > /tmp/d.json
 jf rt rc /tmp/d.json 
+if [ $? -ne 0 ]
+then
+    log_error "Failed to create Docker Repo"
+    exit 1
+fi
 log_task "Docker Repo created"
 
 ## Publish image to Artifactory
 # put push in the background so we can continue with the script
-HFQDN=`nslookup academy-artifactory|grep academy-artifactory|awk '{print $1}'|grep -v Name`
 HFQDN="academy-artifactory:80"
-jf docker login  -uadmin -pAdmin1234! http://${HFQDN}
 log_task "Docker login"
+jf docker login  -uadmin -pAdmin1234! http://${HFQDN}
+if [ $? -ne 0 ]
+then
+    log_error "Failed to login to Artifactory"
+    exit 1
+fi
+log_task "Docker image tag"
 jf docker tag academy-docker-image ${HFQDN}/academy-docker-local/academy-docker-image
-log_task "Docker image created"
+if [ $? -ne 0 ]
+then
+    log_error "Failed to tag Docker image"
+    exit 1
+fi
+log_task "Docker image tagged"
+
+log_task "Docker push"
 jf docker push ${HFQDN}/academy-docker-local/academy-docker-image
+if [ $? -ne 0 ]
+then
+    log_error "Failed to push Docker image"
+    exit 1
+fi
 log_task "Docker image pushed"
 
 log_task "Start image scan in Artifactory"
@@ -68,5 +90,10 @@ jf xr cl api/v2/index \
 -k \
 --data '{ "repo_path": "academy-docker-local/academy-docker-image/latest/manifest.json"}' \
 -H "Content-type: application/json"
-
+if [ $? -ne 0 ]
+then
+    log_error "Failed to start image scan"
+    exit 1
+fi
+log_task "Image scan started"
 log_task "Lab Setup Completed"
