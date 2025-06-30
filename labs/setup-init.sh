@@ -64,8 +64,7 @@ jf docker push ${HFQDN}/academy-docker-local/academy-docker-image
 log_task "Docker image pushed"
 
 log_task "Start image scan in Artifactory"
-path_url="api/v2/index"
-jf xr cl ${path_url} \
+jf xr cl api/v2/index \
 -k \
 --data '{ "repo_path": "academy-docker-local/academy-docker-image/latest/manifest.json"}' \
 -H "Content-type: application/json"
