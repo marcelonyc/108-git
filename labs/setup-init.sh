@@ -86,7 +86,8 @@ fi
 log_task "Docker image pushed"
 
 log_task "Start image scan in Artifactory"
-jf xr cl api/v2/index \
+set -x
+jf xr cl -v --location api/v2/index \
 -k \
 --data '{ "repo_path": "academy-docker-local/academy-docker-image/latest/manifest.json"}' \
 -H "Content-type: application/json"
