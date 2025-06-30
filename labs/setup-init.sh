@@ -86,12 +86,23 @@ fi
 log_task "Docker image pushed"
 
 log_task "Start image scan in Artifactory"
-set -x
-jf xr cl -v --location api/v2/index \
+xray_ready=0
+while [ $xray_ready -eq 0 ]
+do
+jf xr cl api/v2/index \
 -k \
 --data '{ "repo_path": "academy-docker-local/academy-docker-image/latest/manifest.json"}' \
--H "Content-type: application/json"
+-H "Content-type: application/json" | grep 404
 if [ $? -ne 0 ]
+then
+    xray_ready=1
+else
+    log_task "Xray is not ready yet, waiting..."
+    sleep 20
+fi
+done
+
+if [ $xray_ready -ne 1 ]
 then
     log_error "Failed to start image scan"
     exit 1
